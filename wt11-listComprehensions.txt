@@ -1,0 +1,35 @@
+WT - 11 List Comprehensions
+
+What's the use?
+  A much more terse way to declare a list and add values to it
+  A 'comprehensive' declaration & construction in one line, as opposed to 3-4.
+
+General syntax of comprehensions:
+***********************************
+	[expr for var in iterable]
+***********************************	
+	i for i in range(20)
+	or
+	[n ** 2 for n in range(12)]
+
+
+can also have conditionals on the iterator
+
+	[i for i in range(20) if i % 2 == 0]
+
+and multiple iteration! simply use another for (think of like nested)
+
+	in  [(i, j) for i in range(2) for j in range(3)]
+	out	[(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2)]
+
+conditionals on the iterator
+
+
+  Calling these 'list comprehensions' is a bit of a misnomer
+  the same general syntax applies to both sets {} and dicts/dictionaries {key:val}
+
+  {a % 3 for a in range(1000)}
+
+using parens () instead of square brackets [] yields a GENERATOR EXPR. per the text and next chapter:
+
+	"A generator expression is essentially a list comprehension in which elements are generated as-needed rather than all at-once, and the simplicity here belies the power of this language feature: we'll explore this more next."

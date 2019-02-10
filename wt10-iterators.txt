@@ -1,0 +1,31 @@
+wt10-iterators.txt
+
+	covered in chapter 10 of whirlwind tour:
+https://nbviewer.jupyter.org/github/jakevdp/WhirlwindTourOfPython/blob/master/10-Iterators.ipynb
+	
+	a few additional resources:
+https://docs.python.org/3/library/functions.html#enumerate
+https://docs.python.org/3/glossary.html#term-iterator
+
+
+Iterators are the reason that...
+  for x in y:
+...has the syntax it does. 
+
+Behind the scenes, we have an iterator object created on loop declaration which is handling the role 
+traditionally played by explicit declarations of (i=0; (bool condition); i++)
+
+the 'in' part is (I believe) what is evaluating truthiness
+i.e. as long as function next() called on the iterator object has a truthy return value, then the loop
+continues for one more round of execution.
+
+
+
+enumerate()
+
+dictionary def of english word: "mention (a number of things) one by one"
+
+standard method - it takes an iterator object as input, and returns the index/count AND value.
+You should use this to track index more easily
+
+
