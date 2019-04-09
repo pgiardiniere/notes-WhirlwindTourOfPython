@@ -30,6 +30,9 @@ conditionals on the iterator
 
   {a % 3 for a in range(1000)}
 
-using parens () instead of square brackets [] yields a GENERATOR EXPR. per the text and next chapter:
+using parens () instead of square brackets [] yields a GENERATOR EXPR. per the text and next ch:
 
-	"A generator expression is essentially a list comprehension in which elements are generated as-needed rather than all at-once, and the simplicity here belies the power of this language feature: we'll explore this more next."
+		"A generator expression is essentially a list comprehension in which elements are generated 
+		as-needed rather than all at-once, 
+		and the simplicity here belies the power of this language feature: 
+		we'll explore this more next."
