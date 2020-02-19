@@ -22,10 +22,16 @@ y = x
 x += 5
 print("x =", x); print("y =", y)
 # however in Python, even simple types are objects.
+x = 4.5
+print(x.real, "+", x.imag, 'i') # simple types have attributes
+print(x.is_integer())           # simple types have methods
+
+# EVERYTHING in Python is an object. object attributes/methods inclusive.
+print( type(x.is_integer) )
+print( type(x.real) )
+
 
 L = [1, 2, 3]
 L.append(100)
 print(L)
 
-x = 4.5
-print(x.real, "+", x.imag, 'i')
