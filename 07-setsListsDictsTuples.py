@@ -115,5 +115,3 @@ primes.symmetric_difference(odds)
 # collections.namedtuple    each value in tuple is named
 # collections.defaultdict   unspecified keys default to X
 # collections.OrderedDict   Dict with Ordered keys
-
-
