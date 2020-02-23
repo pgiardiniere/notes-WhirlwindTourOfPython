@@ -1,96 +1,108 @@
-### Attribution of code:
-### A Whirlwind Tour of Python by Jake VanderPlas (O’Reilly). Copyright 2016 O’Reilly Media, Inc., 978-1-491-96465-1.
-# All comments my own
+### Generator Expressions vs List Comprehensions:
+[n ** 2 for n in range(12)]    # list comp : square bracket
+(n ** 2 for n in range(12))    # gen. expr : parens
 
+g = (n ** 2 for n in range(12))
+l = list(g)
+print ( g )              # Generator object
+print ( l, '\n' )              # List created from generator
 
-from itertools import count
+# Can iterate over a Generator the same as a List ONE TIME (despite no contents)
+# g = (n ** 2 for n in range(12))
+# for val in l : print(val)
+# for val in g : print(val)
+# print('\n')
+
+g = (n ** 2 for n in range(12))
+print(*l)
+print(*g)
+print('\n')
+
+#########################
+### Infinite Generators :: itertools - count()
+#########################
+from itertools import count     # recall :: count() use
 for i in count():
     print(i, end=' ')
-    if i >= 10: break
+    if i >= 10 : break
 
-### a basic Erosthenes Sieve implementation using a generator
-print('\nfactor divisible gen print until over 40:')
+# If want a generator to go on forever, just link it to count()
 factors = [2, 3, 5, 7]
-G = (i for i in count() if all(i % n > 0 for n in factors))
-for val in G:
+g = (i for i in count() if all(i % n > 0 for n in factors))
+for val in g:
     print(val, end=' ')
-    if val > 40: break
+    if val > 40 :
+        print("\n")
+        break
 
-#############################################
-### List comprehensions can be used multiple times...
-L = [n ** 2 for n in range(12)]
-for val in L:
-    print(val, end=' ')
-print()
+#########################
+### Generator Expressions are Single Use (!!!)
+#########################
+l = [n ** 2 for n in range(12)]
+print(*l)
+print(*l)
 
-for val in L:
-    print(val, end=' ')
+g = (n ** 2 for n in range(12))
+print(list(g))
+print(list(g))
 
-### ... while Generators expire after 1 use
-G = (n ** 2 for n in range(12))
-print(list(G))
-print(list(G))
-#############################################
-
-#############################################
-### Generator execution can be stopped then restarted from same point
-G = (n**2 for n in range(12))
-for n in G:
+# Why is it this way? --- Iteration can be stopped and started
+g = (n ** 2 for n in range(12))
+for n in g:
     print(n, end=' ')
     if n > 30: break
+print('\ndo something in between iters')
+for n in g:
+    print(n, end=' ')   # could be useful for reading in stuff from disk
+print('\n')
 
-print("\ndoing something else here...")
+#########################
+### Generator Functions: Using 'yield'
+#########################
+l1 = [n ** 2 for n in range(12)]
+l2 = []
+for n in range(12): 
+    l2.append(n ** 2)
 
-for n in G:
-    print(n, end=' ')
-#############################################
+print(l1)
+print(l2)
 
-#############################################
-### With 'yield', we can make generator functions
-### another layer of abstraction, which assists in repeated use of complex generators
-L1 = [n ** 2 for n in range(12)]
-L2 = []
-for n in range(12):
-    L2.append(n ** 2)
-print(L1)
-print(L2)
-
-G1 = (n ** 2 for n in range(12))
+g1 = (n ** 2 for n in range(12))
 def gen():
-    for n in range(12):
+    for n in range(12): 
         yield n**2
-G2 = gen()
-print(*G1)
-print(*G2)
+g2 = gen()
 
-#############################################
-### Yield+Gen use-case: prime number generator (revisited)
-### First, the less-elegant, more explicit, List Comprehension method:
+print(*g1)
+print(*g2)
 
-# Generate list of candidates
-L = [n for n in range(2, 40)]
-print(L)
-# Remove all multiples of the first value in L (i.e. 2)
-L = [n for n in L if n == L[0] or n %L[0] > 0]
-print(L)
-# remove all multiples of the second value
-L = [n for n in L if n == L[1] or n % L[1] > 0]
-print(L)
-# remove all multiples of the third value
-L = [n for n in L if n == L[2] or n % L[2] > 0]
-print(L)
-print()
-### Now, we encapsulate this logic in a generator function:
+# Why does this work?
+# Generator Functions are just functions using 'yield' keyword, not 'return'
+# 'yield' yields a sequence of values
 
-## I don't understand precisely how the 2 from n[0] is applied to p in primes for the initial case
-## but after that, it is simply iterating each number from 2 to an arbitrary N
-## if ANY number added to primes CANNOT cleanly divide with remainder 0, add current number to primes, return & continue (i.e. 'yield')
-def gen_primes(N):
+# USE :: to get a fresh generator, we can call the function again
+# EX  :: could refactor this code to use a generator func instead of manual redec. of squares
+
+#########################
+### Example : prime number generator
+#########################
+print('\n\n')
+l = [n for n in range(2, 40)] # make list, 2 to 39
+
+# remove multiples of 1st value
+l = [n for n in l if n==l[0] or n % l[0] > 0]; print(l)
+# remove multiples of 2nd value
+l = [n for n in l if n==l[1] or n % l[1] > 0]; print(l,'\n')
+
+# we can codify this in a Generator Function
+def gen_primes(n):
     """Generate primes up to N"""
     primes = set()
-    for n in range(2, N):
-        if all (n % p > 0 for p in primes):
+    for n in range(2, n):
+        if all(n % p > 0 for p in primes):
             primes.add(n)
             yield n
 
-print(*gen_primes(100))
+print(*gen_primes(40))
+
+print('\n')
