@@ -70,7 +70,6 @@ print(L)
 #########################
 # similar to if-else, loop-else executes iff loop execution
 # ends naturally ( i.e. without 'break'ing ) 
-
 L = []
 nmax = 30
 
