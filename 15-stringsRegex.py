@@ -109,7 +109,7 @@ print(s)
 #########################
 # first, we compile a regular expression. Then, we use it to split a string.
 import re
-regex = re.compile('\s+')   # pylint doesn't like ambiguity, but this is correct
+regex = re.compile(r'\s+')
 regex.split(line)
 
 for s in ["     ", "abc  ", "  abc"]:
@@ -134,7 +134,7 @@ print ( regex.sub('BEAR', line) )
 # Why bother? Regex's are more powerful than their simpler counterparts.
 # parsing (basic) email addresses
 text = "To email guido, try guido@python.org or the older adress guido@google.com"
-email = re.compile('\w+@\w+\.[a-z]{3}')
+email = re.compile(r'\w+@\w+\.[a-z]{3}')
 email.findall(text)
 
 print (email.findall(text))
@@ -143,3 +143,77 @@ print (email.findall(text))
 email.sub('--@--.--', text)
 
 print ( email.sub('--@--.--', text) )
+
+#########################
+### RegEx Syntax (basics)
+#########################
+# simple strings are matched directly
+regex = re.compile('ion')
+regex.findall('Great Expectations')
+
+# characters with special meanings:
+# . ^ $ + ? { } [ ] \ | ( )
+# To match any of those characters directly, escape by using a backslash
+regex = re.compile(r'\$')
+regex.findall("the cost is $20")
+
+# r prefix in r'\$' indicates "Raw String"
+# in standard python, backslash indicates special characters (e.g. \n newline) 
+# but in raw strings, those substitutions are not made.
+print( 'a\tb\tc')
+print(r'a\tb\tc')
+
+# with raw strings, now special characters can match character groups
+# e.g. "\w" is a special marking matching any alphanumeric chars, "\s" == whitespace, etc.
+regex = re.compile(r'\w\s\w')   # regex matches any two alphanum. chars with whitespace between them
+regex.findall('the fox is 9999')
+
+# ------------ table: ------------------------------
+# char  description         char  description
+# \d    Match any digit     \D    Match any !(digit)
+# \s    Match any whitesp   \S    Match any !(whitesp)
+# \w    Match any alphanum  \W    Match any !(alphanum)
+# --------------------------------------------------
+
+#########################
+### Square brackets ++
+#########################
+# Square Brackets match custom character groups
+regex = re.compile(r'[aeiou]')
+regex.split('consequential')
+
+# Dashes within square brackets specify a range
+regex = re.compile('[A-Z][0-9]') # _capitalLetter_ _digit_
+regex.findall('1043879, G2, H6')
+
+# Wildcards match repeated characters
+regex = re.compile(r'\w{3}')
+regex.findall('The quick brown fox')  # the, qui, bro, fox
+
+regex = re.compile(r'\w+')  # + == "1 or more"
+regex.findall('The quick brown fox')
+
+# ------------ table: ------------------------------
+# char  description       
+#  ?    Match zero or  one repetitions (preceding)
+#  *    Match zero or more repetitions (preceding)
+#  +    Match  one or more repetitions (preceding)
+# {n}   Match n            repetitions (preceding)
+# {m,n} Match between m and n repetitons (preceding)
+# --------------------------------------------------
+
+# Now can make a more sophisticated email matcher !
+email2 = re.compile(r'[\w.]+@\w+\.[a-z]{3}')
+email2.findall('barack.obama@whitehouse.gov')   # can handle multiple periods
+
+
+### Parentheses indicate Groups to extract
+# Often, want to extract components instead of full match. Use parens!
+text = "To email Guido, try guido@python.org or the older address guido@google.com."
+email3 = re.compile(r'([\w.]+)@(\w+)\.([a-z]{3})')
+email3.findall(text)        # gets only the alphanum chars, not the . and @
+
+# We can name extracted parts using "(?P<name>)", which does so in Dictionaries
+email4 = re.compile(r'(?P<user>[\w.]+)@(?P<domain>\w+)\.(?P<suffix>[a-z]{3})')
+match = email4.match('guido@python.org')
+match.groupdict()
