@@ -11,10 +11,9 @@ from math import cos, pi
 print(cos(pi))
 
 ### implicit import of module contents (to local namespace)
-### commented below to squelch errors
 from math import *  
 print(sin(pi) ** 2 + cos(pi) ** 2)
 
-    # the above is not a recommended method of import. Per the 'problems' in VSCode console,
+    # the above is not a recommended method of import.
     # there are 50 funcs in math module imported to local namespace, of which only 3 are used
-    # if I had functions before this import of the same name, they would be implicitly overwritten
+    # further, this method of import overwrites previously declared funcs of same name
